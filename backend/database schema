@@ -1,0 +1,29 @@
+-- Users table - core user information
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP WITH TIME ZONE
+);
+
+-- User profiles - professional information
+CREATE TABLE user_profiles (
+    profile_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    occupation VARCHAR(255) NOT NULL,
+    industry VARCHAR(100) NOT NULL,
+    experience_level VARCHAR(100) NOT NULL,
+    interview_goal VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Indexes for performance
+CREATE INDEX idx_user_email ON users(email);
+CREATE INDEX idx_user_profiles_user_id ON user_profiles(user_id);
